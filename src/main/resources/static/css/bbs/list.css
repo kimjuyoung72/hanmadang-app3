@@ -7,7 +7,7 @@ main { display:flex; justify-content:center; }
 
 .bbs-wrap { width:90% }
 .bbs-wrap .bbs-title {
-  text-align: center; padding:20px 0;
+  text-align: left; padding:20px 0;
 }
 
 .bbs-wrap .bbs-content table{

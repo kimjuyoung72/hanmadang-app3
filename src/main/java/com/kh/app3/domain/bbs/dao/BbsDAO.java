@@ -1,5 +1,7 @@
 package com.kh.app3.domain.bbs.dao;
 
+import com.kh.app3.domain.EventInfo;
+
 import java.util.List;
 
 public interface BbsDAO {
@@ -27,7 +29,8 @@ public interface BbsDAO {
    * @return
    */
   List<Bbs>  findAll(BbsFilterCondition filterCondition);
-  
+
+  List<EventInfo> findAllEvents(int startRec, int endRec);
   /**
    * 상세 조회
    * @param id 게시글번호
@@ -74,4 +77,9 @@ public interface BbsDAO {
   int totalCount(String bcategory);
   int totalCount(BbsFilterCondition filterCondition);
 
+  /**
+   * 전체건수
+   * @return 등록 이벤트 건수
+   */
+  int totalPEventCount();
 }

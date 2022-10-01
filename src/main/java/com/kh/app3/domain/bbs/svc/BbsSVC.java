@@ -1,5 +1,6 @@
 package com.kh.app3.domain.bbs.svc;
 
+import com.kh.app3.domain.EventInfo;
 import com.kh.app3.domain.bbs.dao.Bbs;
 import com.kh.app3.domain.bbs.dao.BbsFilterCondition;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,12 @@ public interface BbsSVC {
    * @return
    */
   List<Bbs>  findAll(BbsFilterCondition filterCondition);
+
+  /**
+   * 목록
+   * @return 이벤트 정보
+   */
+  List<EventInfo> findAllEvents(int startRec, int endRec);
   /**
    * 상세 조회
    * @param id 게시글번호
@@ -82,4 +89,5 @@ public interface BbsSVC {
   int totalCount();
   int totalCount(String bcategory);
   int totalCount(BbsFilterCondition filterCondition);
+  int totalPEventCount();
 }

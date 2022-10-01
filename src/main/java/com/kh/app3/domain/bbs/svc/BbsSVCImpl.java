@@ -1,25 +1,17 @@
 package com.kh.app3.domain.bbs.svc;
 
+import com.kh.app3.domain.EventInfo;
 import com.kh.app3.domain.bbs.dao.Bbs;
 import com.kh.app3.domain.bbs.dao.BbsDAO;
 import com.kh.app3.domain.bbs.dao.BbsFilterCondition;
-import com.kh.app3.domain.common.file.UploadFile;
-import com.kh.app3.domain.common.file.dao.UploadFileDAO;
 import com.kh.app3.domain.common.file.svc.UploadFileSVC;
-import com.kh.app3.domain.common.paging.RecordCriteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -68,6 +60,13 @@ public class BbsSVCImpl implements BbsSVC{
   @Override
   public List<Bbs> findAll(BbsFilterCondition filterCondition) {
     return bbsDAO.findAll(filterCondition);
+  }
+
+  //이벤트 정보
+
+  @Override
+  public List<EventInfo> findAllEvents(int startRec, int endRec) {
+    return bbsDAO.findAllEvents(startRec, endRec);
   }
 
   //상세조회
@@ -142,5 +141,10 @@ public class BbsSVCImpl implements BbsSVC{
   @Override
   public int totalCount(BbsFilterCondition filterCondition) {
     return bbsDAO.totalCount(filterCondition);
+  }
+
+  @Override
+  public int totalPEventCount() {
+    return bbsDAO.totalPEventCount();
   }
 }

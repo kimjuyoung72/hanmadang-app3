@@ -1,5 +1,6 @@
 package com.kh.app3.web;
 
+import com.kh.app3.domain.EventInfo;
 import com.kh.app3.domain.bbs.dao.Bbs;
 import com.kh.app3.domain.bbs.dao.BbsFilterCondition;
 import com.kh.app3.domain.bbs.svc.BbsSVC;
@@ -7,7 +8,6 @@ import com.kh.app3.domain.common.code.CodeDAO;
 import com.kh.app3.domain.common.file.UploadFile;
 import com.kh.app3.domain.common.file.svc.UploadFileSVC;
 import com.kh.app3.domain.common.paging.FindCriteria;
-import com.kh.app3.domain.common.paging.PageCriteria;
 import com.kh.app3.web.form.bbs.*;
 import com.kh.app3.web.form.login.LoginMember;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -129,25 +126,6 @@ public class BbsController {
     return "redirect:/bbs/{id}";
   }
 
-  //목록
-//  @GetMapping("/list")
-//  public String list(
-//      Model model) {
-//
-//    List<Bbs> list = bbsSvc.findAll();
-//
-//    List<ListForm> partOfList = new ArrayList<>();
-//    for (Bbs bbs : list) {
-//      ListForm listForm = new ListForm();
-//      BeanUtils.copyProperties(bbs, listForm);
-//      partOfList.add(listForm);
-//    }
-//
-//    model.addAttribute("list", partOfList);
-//
-//    return "bbs/list";
-//  }
-
   @GetMapping({"/list",
                "/list/{reqPage}",
                "/list/{reqPage}//",
@@ -168,29 +146,35 @@ public class BbsController {
     fc.setKeyword(keyword.orElse(""));        //검색어
 
     List<Bbs> list = null;
+    List<EventInfo> eList = null;
     //게시물 목록 전체
-    if(category == null || StringUtils.isEmpty(cate)) {
-
-      //검색어 있음
-      if(searchType.isPresent() && keyword.isPresent()){
-        BbsFilterCondition filterCondition = new BbsFilterCondition(
-            "",fc.getRc().getStartRec(), fc.getRc().getEndRec(),
-            searchType.get(),
-            keyword.get());
-        fc.setTotalRec(bbsSvc.totalCount(filterCondition));
-        fc.setSearchType(searchType.get());
-        fc.setKeyword(keyword.get());
-        list = bbsSvc.findAll(filterCondition);
-
-      //검색어 없음  
-      }else {
-        //총레코드수
-        fc.setTotalRec(bbsSvc.totalCount());
-        list = bbsSvc.findAll(fc.getRc().getStartRec(), fc.getRc().getEndRec());
-      }
+//    if(category == null || StringUtils.isEmpty(cate)) {
+//
+//      //검색어 있음
+//      if(searchType.isPresent() && keyword.isPresent()){
+//        BbsFilterCondition filterCondition = new BbsFilterCondition(
+//            "",fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+//            searchType.get(),
+//            keyword.get());
+//        fc.setTotalRec(bbsSvc.totalCount(filterCondition));
+//        fc.setSearchType(searchType.get());
+//        fc.setKeyword(keyword.get());
+//        list = bbsSvc.findAll(filterCondition);
+//
+//      //검색어 없음
+//      }else {
+//        if(cate.equals("B0101")){
+//          fc.setTotalRec(bbsSvc.totalPEventCount());
+//          eList = bbsSvc.findAllEvents(fc.getRc().getStartRec(), fc.getRc().getEndRec());
+//        }else {
+//          //총레코드수
+//          fc.setTotalRec(bbsSvc.totalCount());
+//          list = bbsSvc.findAll(fc.getRc().getStartRec(), fc.getRc().getEndRec());
+//        }
+//      }
 
     //카테고리별 목록
-    }else{
+//    }else{
       //검색어 있음
       if(searchType.isPresent() && keyword.isPresent()){
         BbsFilterCondition filterCondition = new BbsFilterCondition(
@@ -203,19 +187,42 @@ public class BbsController {
         list = bbsSvc.findAll(filterCondition);
       //검색어 없음
       }else {
-        fc.setTotalRec(bbsSvc.totalCount(cate));
-        list = bbsSvc.findAll(cate, fc.getRc().getStartRec(), fc.getRc().getEndRec());
+        if(cate.equals("B0101")){
+          fc.setTotalRec(bbsSvc.totalPEventCount());
+          eList = bbsSvc.findAllEvents(fc.getRc().getStartRec(), fc.getRc().getEndRec());
+          log.info("findec Evt={}", eList.size());
+        }else {
+          fc.setTotalRec(bbsSvc.totalCount(cate));
+          list = bbsSvc.findAll(cate, fc.getRc().getStartRec(), fc.getRc().getEndRec());
+        }
+      }
+//    }
+    List<EventInfoForm> partOfEventList = new ArrayList<>();
+    List<ListForm> partOfList = new ArrayList<>();
+    if(cate.equals("B0101")){
+
+      for (EventInfo event : eList) {
+        EventInfoForm infoForm = new EventInfoForm();
+        BeanUtils.copyProperties(event, infoForm);
+        partOfEventList.add(infoForm);
+      }
+      log.info("plist={}", partOfList.size());
+    }else {
+
+      for (Bbs bbs : list) {
+        ListForm listForm = new ListForm();
+        BeanUtils.copyProperties(bbs, listForm);
+        partOfList.add(listForm);
       }
     }
 
-    List<ListForm> partOfList = new ArrayList<>();
-    for (Bbs bbs : list) {
-      ListForm listForm = new ListForm();
-      BeanUtils.copyProperties(bbs, listForm);
-      partOfList.add(listForm);
+//    log.info("list size={}", partOfList.size());
+    if (cate.equals("B0101")) {
+      model.addAttribute("list", partOfEventList);
+    } else {
+      model.addAttribute("list", partOfList);
     }
 
-    model.addAttribute("list", partOfList);
     model.addAttribute("fc",fc);
     model.addAttribute("category", cate);
 

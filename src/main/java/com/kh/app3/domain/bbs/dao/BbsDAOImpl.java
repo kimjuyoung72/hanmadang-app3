@@ -1,5 +1,6 @@
 package com.kh.app3.domain.bbs.dao;
 
+import com.kh.app3.domain.EventInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BbsDAOImpl implements BbsDAO{
 
-  private final JdbcTemplate jdbcTemplate;
+  private final JdbcTemplate jt;
 
   //원글작성
   @Override
@@ -33,7 +34,7 @@ public class BbsDAOImpl implements BbsDAO{
 
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
-    jdbcTemplate.update(new PreparedStatementCreator() {
+    jt.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement pstmt = con.prepareStatement(sql.toString(), new String[]{"bbs_id"});
@@ -72,7 +73,7 @@ public class BbsDAOImpl implements BbsDAO{
     sql.append("  bbs ");
     sql.append("Order by bgroup desc, step asc ");
 
-    List<Bbs> list = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(Bbs.class));
+    List<Bbs> list = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Bbs.class));
 
     return list;
   }
@@ -101,7 +102,7 @@ public class BbsDAOImpl implements BbsDAO{
     sql.append("WHERE bcategory = ? ");
     sql.append("Order by bgroup desc, step asc ");
 
-    List<Bbs> list = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(Bbs.class),category);
+    List<Bbs> list = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Bbs.class),category);
 
     return list;
   }
@@ -130,7 +131,7 @@ public class BbsDAOImpl implements BbsDAO{
     sql.append("    FROM bbs) t1 ");
     sql.append("where t1.no between ? and ? ");
 
-    List<Bbs> list = jdbcTemplate.query(
+    List<Bbs> list = jt.query(
         sql.toString(),
         new BeanPropertyRowMapper<>(Bbs.class),
         startRec, endRec
@@ -163,12 +164,49 @@ public class BbsDAOImpl implements BbsDAO{
     sql.append("   where bcategory = ? ) t1 ");
     sql.append("where t1.no between ? and ? ");
 
-    List<Bbs> list = jdbcTemplate.query(
+    List<Bbs> list = jt.query(
         sql.toString(),
         new BeanPropertyRowMapper<>(Bbs.class),
         category, startRec, endRec
     );
     return list;
+  }
+  @Override
+  public List<EventInfo> findAllEvents(int startRec, int endRec) {
+    StringBuffer sql = new StringBuffer();
+    sql.append("select t1.* ");
+    sql.append("from( ");
+    sql.append("    SELECT ");
+    sql.append("      ROW_NUMBER() OVER (ORDER BY event_id DESC) no, ");
+    sql.append("      event_id, ");
+    sql.append("      mt20id, ");
+    sql.append("      prfnm, ");
+    sql.append("      prfpdfrom, ");
+    sql.append("      prfpdto, ");
+    sql.append("      fcltynm, ");
+    sql.append("      prfcast, ");
+    sql.append("      prfcrew, ");
+    sql.append("      prfruntime, ");
+    sql.append("      prfage, ");
+    sql.append("      entrpsnm, ");
+    sql.append("      pcseguidance, ");
+    sql.append("      poster, ");
+    sql.append("      genrenm, ");
+    sql.append("      prfstate ");
+    sql.append("    from p_event) t1 ");
+    sql.append("where t1.no between ? and ? ");
+
+    List<EventInfo> result = jt.query(
+            sql.toString(),
+            new BeanPropertyRowMapper<>(EventInfo.class),
+            startRec,
+            endRec);
+    try {
+      log.info("Evt query = {}", result.size());
+    } catch (NullPointerException e) {
+      log.info("널포인트");
+    }
+    return result;
   }
 
   //검색
@@ -206,7 +244,7 @@ public class BbsDAOImpl implements BbsDAO{
 
     //게시판 전체
     if(StringUtils.isEmpty(filterCondition.getCategory())){
-      list = jdbcTemplate.query(
+      list = jt.query(
           sql.toString(),
           new BeanPropertyRowMapper<>(Bbs.class),
           filterCondition.getStartRec(),
@@ -214,7 +252,7 @@ public class BbsDAOImpl implements BbsDAO{
       );
     //게시판 분류
     }else{
-      list = jdbcTemplate.query(
+      list = jt.query(
           sql.toString(),
           new BeanPropertyRowMapper<>(Bbs.class),
           filterCondition.getCategory(),
@@ -225,6 +263,8 @@ public class BbsDAOImpl implements BbsDAO{
 
     return list;
   }
+
+
 
   //조회
   @Override
@@ -251,7 +291,7 @@ public class BbsDAOImpl implements BbsDAO{
 
     Bbs bbsItem = null;
     try {
-      bbsItem = jdbcTemplate.queryForObject(
+      bbsItem = jt.queryForObject(
           sql.toString(),
           new BeanPropertyRowMapper<>(Bbs.class),
           id);
@@ -269,7 +309,7 @@ public class BbsDAOImpl implements BbsDAO{
     sql.append("DELETE FROM bbs ");
     sql.append(" WHERE bbs_id = ? ");
 
-    int updateItemCount = jdbcTemplate.update(sql.toString(), id);
+    int updateItemCount = jt.update(sql.toString(), id);
 
     return updateItemCount;
   }
@@ -286,7 +326,7 @@ public class BbsDAOImpl implements BbsDAO{
     sql.append("       udate = systimestamp ");
     sql.append(" WHERE bbs_id = ? ");
 
-    int updatedItemCount = jdbcTemplate.update(
+    int updatedItemCount = jt.update(
         sql.toString(),
         bbs.getBcategory(),
         bbs.getTitle(),
@@ -309,7 +349,7 @@ public class BbsDAOImpl implements BbsDAO{
     sql.append("values(bbs_bbs_id_seq.nextval,?,?,?,?,?,?,?,?,?) ");
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
-    jdbcTemplate.update(new PreparedStatementCreator() {
+    jt.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
         PreparedStatement pstmt = con.prepareStatement(sql.toString(), new String[]{"bbs_id"});
@@ -364,7 +404,7 @@ public class BbsDAOImpl implements BbsDAO{
     sql.append(" where bgroup =  ? ");
     sql.append("   and step  >  ? ");
 
-    int affectedRows = jdbcTemplate.update(sql.toString(), bbs.getBgroup(), bbs.getStep());
+    int affectedRows = jt.update(sql.toString(), bbs.getBgroup(), bbs.getStep());
 
     return affectedRows;
   }
@@ -377,7 +417,7 @@ public class BbsDAOImpl implements BbsDAO{
     sql.append("set hit = hit + 1 ");
     sql.append("where bbs_id = ? ");
 
-    int affectedRows = jdbcTemplate.update(sql.toString(), id);
+    int affectedRows = jt.update(sql.toString(), id);
 
     return affectedRows;
   }
@@ -388,8 +428,18 @@ public class BbsDAOImpl implements BbsDAO{
 
     String sql = "select count(*) from bbs";
 
-    Integer cnt = jdbcTemplate.queryForObject(sql, Integer.class);
+    Integer cnt = jt.queryForObject(sql, Integer.class);
 
+    return cnt;
+  }
+
+  @Override
+  public int totalPEventCount() {
+
+    String sql = "select count(*) from p_event";
+
+    Integer cnt = jt.queryForObject(sql, Integer.class);
+    log.info("Event size ={}", cnt);
     return cnt;
   }
 
@@ -398,7 +448,7 @@ public class BbsDAOImpl implements BbsDAO{
 
     String sql = "select count(*) from bbs where bcategory = ? ";
 
-    Integer cnt = jdbcTemplate.queryForObject(sql, Integer.class, bcategory);
+    Integer cnt = jt.queryForObject(sql, Integer.class, bcategory);
 
     return cnt;
   }
@@ -417,12 +467,12 @@ public class BbsDAOImpl implements BbsDAO{
     Integer cnt = 0;
     //게시판 전체 검색 건수
     if(StringUtils.isEmpty(filterCondition.getCategory())) {
-      cnt = jdbcTemplate.queryForObject(
+      cnt = jt.queryForObject(
               sql.toString(), Integer.class
             );
     //게시판 분류별 검색 건수
     }else{
-      cnt = jdbcTemplate.queryForObject(
+      cnt = jt.queryForObject(
               sql.toString(), Integer.class,
               filterCondition.getCategory()
             );

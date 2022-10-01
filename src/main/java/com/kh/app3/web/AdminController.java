@@ -9,14 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Controller
@@ -31,35 +28,43 @@ public class AdminController {
 //    this.memberSVC = memberSVC;
 //  }
 
-  //성별
-  @ModelAttribute("gender")
-  public Gender[] genter(){
+//  //성별
+//  @ModelAttribute("gender")
+//  public Gender[] genter(){
+//
+//    return Gender.values();  //[MALE, FEMALE]
+//  }
+//
+//  //취미
+//  @ModelAttribute("hobbys")
+//  public Map<String,String> hobbys(){
+//    Map<String,String> hobbys = new HashMap<>();
+//    hobbys.put("reading", "독서");
+//    hobbys.put("swim", "수영");
+//    hobbys.put("climing", "등산");
+//    hobbys.put("golf", "골프");
+//    return hobbys;
+//  }
+//
+//  //지역
+//  @ModelAttribute("regions")
+//  public List<String> regions(){
+//    List<String> regions = new ArrayList<>();
+//    regions.add("서울");
+//    regions.add("부산");
+//    regions.add("울산");
+//    regions.add("대구");
+//    regions.add("제주");
+//    return regions;
+//  }
 
-    return Gender.values();  //[MALE, FEMALE]
+  //공공데이터 요청 화면
+  @GetMapping("/api")
+  public String ApiForm() {
+
+    return "/admin/apiForm";
   }
 
-  //취미
-  @ModelAttribute("hobbys")
-  public Map<String,String> hobbys(){
-    Map<String,String> hobbys = new HashMap<>();
-    hobbys.put("reading", "독서");
-    hobbys.put("swim", "수영");
-    hobbys.put("climing", "등산");
-    hobbys.put("golf", "골프");
-    return hobbys;
-  }
-
-  //지역
-  @ModelAttribute("regions")
-  public List<String> regions(){
-    List<String> regions = new ArrayList<>();
-    regions.add("서울");
-    regions.add("부산");
-    regions.add("울산");
-    regions.add("대구");
-    regions.add("제주");
-    return regions;
-  }
 
   //관리자 홈
   @GetMapping

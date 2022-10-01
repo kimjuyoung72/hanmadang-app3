@@ -11,43 +11,10 @@
 <body>
   <nav th:fragment="global">
     <ul class="depth1">
-      <li class="item">
-        <a href="#">menu1</a>
-        <ul class="depth2">
-          <li class="item"><a href="#">menu-1</a></li>
-          <li class="item"><a href="#">menu-2</a></li>
-        </ul>
-      </li>
-      <li class="item">
-        <a href="#">menu2</a>
-        <ul class="depth2">
-          <li class="item"><a href="#">menu-1</a></li>
-          <li class="item"><a href="#">menu-2</a></li>
-        </ul>
-      </li>
-      <li class="item">
-        <a href="#" th:href="@{/bbs/list}">게시판</a>
-        <ul class="depth2">
-          <li class="item"><a href="#" th:href="@{/bbs/list?category=B0101}">Spring</a></li>
-          <li class="item"><a href="#" th:href="@{/bbs/list?category=B0102}">Database</a></li>
-          <li class="item"><a href="#" th:href="@{/bbs/list?category=B0103}">Q&A</a></li>
-          <li class="item"><a href="#" th:href="@{/bbs/list?category=B0104}">자유게시판</a></li>
-        </ul>
-      </li>
-      <li class="item">
-        <a href="#">menu4</a>
-        <ul class="depth2">
-          <li class="item"><a href="#">menu-1</a></li>
-          <li class="item"><a href="#">menu-2</a></li>
-        </ul>
-      </li>
-      <li class="item">
-        <a href="#">menu5</a>
-        <ul class="depth2">
-          <li class="item"><a href="#">menu-1</a></li>
-          <li class="item"><a href="#">menu-2</a></li>
-        </ul>
-      </li>
+      <li class="item"><a href="#" th:href="@{/bbs/list?category=B0101}">공연</a></li>
+      <li class="item"><a href="#" th:href="@{/bbs/list?category=B0102}">홍보</a></li>
+      <li class="item"><a href="#" th:href="@{/bbs/list?category=B0103}">후기</a></li>
+      <li class="item"><a href="#" th:href="@{/bbs/list?category=B0104}">지도</a></li>
     </ul>
   </nav>
   <nav th:fragment="admin">
