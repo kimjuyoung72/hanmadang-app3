@@ -77,6 +77,8 @@ public interface BbsDAO {
   int totalCount(String bcategory);
   int totalCount(BbsFilterCondition filterCondition);
 
+  int totalEventCount(BbsFilterCondition filterCondition);
+
   /**
    * 전체건수
    * @return 등록 이벤트 건수

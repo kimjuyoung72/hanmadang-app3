@@ -481,6 +481,33 @@ public class BbsDAOImpl implements BbsDAO{
     return cnt;
   }
 
+  @Override
+  public int totalEventCount(BbsFilterCondition filterCondition) {
+    StringBuffer sql = new StringBuffer();
+
+    sql.append("select count(*) ");
+    sql.append("  from p_event  ");
+    sql.append(" where  ");
+
+    sql = dynamicQueryForEvent(filterCondition, sql);
+
+    Integer cnt = 0;
+    //게시판 전체 검색 건수
+    if(StringUtils.isEmpty(filterCondition.getCategory())) {
+      cnt = jt.queryForObject(
+              sql.toString(), Integer.class
+      );
+      //게시판 분류별 검색 건수
+    }else{
+      cnt = jt.queryForObject(
+              sql.toString(), Integer.class,
+              filterCondition.getCategory()
+      );
+    }
+
+    return cnt;
+  }
+
   private StringBuffer dynamicQuery(BbsFilterCondition filterCondition, StringBuffer sql) {
     //분류
     if(StringUtils.isEmpty(filterCondition.getCategory())){
@@ -520,4 +547,42 @@ public class BbsDAOImpl implements BbsDAO{
     return sql;
   }
 
+  private StringBuffer dynamicQueryForEvent(BbsFilterCondition filterCondition, StringBuffer sql) {
+    //분류
+//    if(StringUtils.isEmpty(filterCondition.getCategory())){
+//
+//    }else{
+//      sql.append("       bcategory = 'B0101' ");
+//    }
+
+    //분류,검색유형,검색어 존재
+    if(!StringUtils.isEmpty(filterCondition.getCategory()) &&
+            !StringUtils.isEmpty(filterCondition.getSearchType()) &&
+            !StringUtils.isEmpty(filterCondition.getKeyword())){
+
+      sql.append(" AND ");
+    }
+
+    //검색유형
+    switch (filterCondition.getSearchType()){
+      case "TC":  //제목 + 내용
+        sql.append("    (  title    like '%"+ filterCondition.getKeyword()+"%' ");
+        sql.append("    or bcontent like '%"+ filterCondition.getKeyword()+"%' )");
+        break;
+      case "T":   //제목
+        sql.append("       title    like '%"+ filterCondition.getKeyword()+"%' ");
+        break;
+      case "C":   //내용
+        sql.append("       bcontent like '%"+ filterCondition.getKeyword()+"%' ");
+        break;
+      case "E":   //아이디(이메일)
+        sql.append("       email    like '%"+ filterCondition.getKeyword()+"%' ");
+        break;
+      case "N":   //별칭
+        sql.append("       nickname like '%"+ filterCondition.getKeyword()+"%' ");
+        break;
+      default:
+    }
+    return sql;
+  }
 }
