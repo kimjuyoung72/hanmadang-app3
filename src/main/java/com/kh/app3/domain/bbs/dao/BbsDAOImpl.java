@@ -239,19 +239,18 @@ public class BbsDAOImpl implements BbsDAO{
     sql.append(") t1 ");
     sql.append("where t1.no between ? and ? ");
 
-
     List<Bbs> list = null;
 
     //게시판 전체
-    if(StringUtils.isEmpty(filterCondition.getCategory())){
-      list = jt.query(
-          sql.toString(),
-          new BeanPropertyRowMapper<>(Bbs.class),
-          filterCondition.getStartRec(),
-          filterCondition.getEndRec()
-      );
+//    if(StringUtils.isEmpty(filterCondition.getCategory())){
+//      list = jt.query(
+//          sql.toString(),
+//          new BeanPropertyRowMapper<>(Bbs.class),
+//          filterCondition.getStartRec(),
+//          filterCondition.getEndRec()
+//      );
     //게시판 분류
-    }else{
+//    }else{
       list = jt.query(
           sql.toString(),
           new BeanPropertyRowMapper<>(Bbs.class),
@@ -259,12 +258,51 @@ public class BbsDAOImpl implements BbsDAO{
           filterCondition.getStartRec(),
           filterCondition.getEndRec()
       );
-    }
+//    }
 
     return list;
   }
 
+  @Override
+  public List<EventInfo> findAllEvents(BbsFilterCondition filterCondition) {
+    StringBuffer sql = new StringBuffer();
+    sql.append("select t1.* ");
+    sql.append("from( ");
+    sql.append("    SELECT  ROW_NUMBER() OVER (ORDER BY event_id DESC) no, ");
+    sql.append("            event_id, ");
+    sql.append("            mt20id, ");
+    sql.append("            prfnm, ");
+    sql.append("            prfpdfrom, ");
+    sql.append("            prfpdto, ");
+    sql.append("            fcltynm, ");
+    sql.append("            prfcast, ");
+    sql.append("            prfcrew, ");
+    sql.append("            prfruntime, ");
+    sql.append("            prfage, ");
+    sql.append("            entrpsnm, ");
+    sql.append("            pcseguidance, ");
+    sql.append("            poster, ");
+    sql.append("            sty, ");
+    sql.append("            genrenm, ");
+    sql.append("            prfstate, ");
+    sql.append("            dtguidance ");
+    sql.append("      FROM p_event ");
+    sql.append("     WHERE ");
 
+    //분류
+    sql = dynamicQueryForEvent(filterCondition, sql);
+    sql.append(") t1 ");
+    sql.append("where t1.no between ? and ? ");
+
+    List<EventInfo> list = null;
+    list = jt.query(
+        sql.toString(),
+        new BeanPropertyRowMapper<>(EventInfo.class),
+        filterCondition.getStartRec(),
+        filterCondition.getEndRec()
+    );
+    return list;
+  }
 
   //조회
   @Override
@@ -422,6 +460,13 @@ public class BbsDAOImpl implements BbsDAO{
     return affectedRows;
   }
 
+
+  //좋아요증감
+  @Override
+  public int increaseGoodCount(Long id) {
+    return 0;
+  }
+
   //전체건수
   @Override
   public int totalCount() {
@@ -513,6 +558,7 @@ public class BbsDAOImpl implements BbsDAO{
     if(StringUtils.isEmpty(filterCondition.getCategory())){
 
     }else{
+      log.info("dnmic query cate={}", filterCondition.getCategory());
       sql.append("       bcategory = ? ");
     }
 
@@ -548,39 +594,30 @@ public class BbsDAOImpl implements BbsDAO{
   }
 
   private StringBuffer dynamicQueryForEvent(BbsFilterCondition filterCondition, StringBuffer sql) {
-    //분류
-//    if(StringUtils.isEmpty(filterCondition.getCategory())){
-//
-//    }else{
-//      sql.append("       bcategory = 'B0101' ");
-//    }
-
-    //분류,검색유형,검색어 존재
-    if(!StringUtils.isEmpty(filterCondition.getCategory()) &&
-            !StringUtils.isEmpty(filterCondition.getSearchType()) &&
-            !StringUtils.isEmpty(filterCondition.getKeyword())){
-
-      sql.append(" AND ");
-    }
 
     //검색유형
     switch (filterCondition.getSearchType()){
-      case "TC":  //제목 + 내용
-        sql.append("    (  title    like '%"+ filterCondition.getKeyword()+"%' ");
-        sql.append("    or bcontent like '%"+ filterCondition.getKeyword()+"%' )");
+      case "ETC":   //이벤트 제목+내용
+        sql.append("       prfnm    like '%"+ filterCondition.getKeyword()+"%' ");
+        sql.append("    or sty like '%"+ filterCondition.getKeyword()+"%' )");
         break;
-      case "T":   //제목
-        sql.append("       title    like '%"+ filterCondition.getKeyword()+"%' ");
+      case "ET":  //이벤트 제목
+        sql.append("       prfnm    like '%"+ filterCondition.getKeyword()+"%' ");
         break;
-      case "C":   //내용
-        sql.append("       bcontent like '%"+ filterCondition.getKeyword()+"%' ");
+      case "EC":  //이벤트 내용
+        sql.append("       sty like '%"+ filterCondition.getKeyword()+"%' ");
         break;
-      case "E":   //아이디(이메일)
-        sql.append("       email    like '%"+ filterCondition.getKeyword()+"%' ");
+      case "EG":  //이벤트 장르
+        sql.append("       genrenm like '%"+ filterCondition.getKeyword()+"%' ");
         break;
-      case "N":   //별칭
-        sql.append("       nickname like '%"+ filterCondition.getKeyword()+"%' ");
+      case "ED":  //이벤트 일자
+        sql.append("       to_date(prfpdfrom) <= '" + filterCondition.getKeyword() + "' ");
+        sql.append("       and to_date(prfpdto) >= '" + filterCondition.getKeyword() + "' ");
         break;
+      case "EA":  //이벤트 관람 가능 연령
+        sql.append("       prfage like '%"+ filterCondition.getKeyword()+"%' ");
+        break;
+
       default:
     }
     return sql;

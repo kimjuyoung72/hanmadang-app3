@@ -177,14 +177,25 @@ public class BbsController {
 //    }else{
       //검색어 있음
       if(searchType.isPresent() && keyword.isPresent()){
-        BbsFilterCondition filterCondition = new BbsFilterCondition(
-            category.get(),fc.getRc().getStartRec(), fc.getRc().getEndRec(),
-            searchType.get(),
-            keyword.get());
-        fc.setTotalRec(bbsSvc.totalCount(filterCondition));
-        fc.setSearchType(searchType.get());
-        fc.setKeyword(keyword.get());
-        list = bbsSvc.findAll(filterCondition);
+        if(cate.equals("B0101")) {
+          BbsFilterCondition filterCondition = new BbsFilterCondition(
+              "B0101", fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+              searchType.get(),
+              keyword.get());
+          fc.setTotalRec(bbsSvc.totalPEventCount());
+          fc.setSearchType(searchType.get());
+          fc.setKeyword(keyword.get());
+          eList = bbsSvc.findAllEvents(filterCondition);
+        }else {
+          BbsFilterCondition filterCondition = new BbsFilterCondition(
+              category.get(), fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+              searchType.get(),
+              keyword.get());
+          fc.setTotalRec(bbsSvc.totalCount(filterCondition));
+          fc.setSearchType(searchType.get());
+          fc.setKeyword(keyword.get());
+          list = bbsSvc.findAll(filterCondition);
+        }
       //검색어 없음
       }else {
         if(cate.equals("B0101")){

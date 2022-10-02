@@ -38,6 +38,7 @@ public interface BbsSVC {
    */
   List<Bbs>  findAll(BbsFilterCondition filterCondition);
 
+  List<EventInfo> findAllEvents(BbsFilterCondition filterCondition);
   /**
    * 목록
    * @return 이벤트 정보

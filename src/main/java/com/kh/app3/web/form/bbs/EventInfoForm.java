@@ -29,5 +29,8 @@ public class EventInfoForm {
   private List<String> styurls;
   private String mt10id;        // MT10ID	VARCHAR2(12 BYTE)	Yes		10
   private String dtguidance;    // DTGUIDANCE	VARCHAR2(100 BYTE)	Yes		17
+
+  private Integer hit;          //조회수
+  private Integer good;         //좋아요
 }
 

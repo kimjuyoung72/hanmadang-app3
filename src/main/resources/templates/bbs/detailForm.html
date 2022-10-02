@@ -66,7 +66,8 @@
                 <div><lable>작성자</lable></div>
                 <div><span th:text="|*{nickname} ( *{email} )|"></span></div>
                 <div><lable>내용</lable></div>
-                <div><textarea name="" id="" rows="10" class="w100" th:field="*{bcontent}" th:readonly="readonly"></textarea></div>
+<!--                <div><textarea name="" id="" rows="10" class="w100" th:field="*{bcontent}" th:readonly="readonly"></textarea></div>-->
+                <div><p th:utext="*{bcontent}"></p></div>
               </div>
               <div class="bbs-btngrp">
 <!--                <button type="button" id="replyBtn">답글</button>-->

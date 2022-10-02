@@ -22,15 +22,21 @@ public interface BbsDAO {
 
   List<Bbs>  findAll(int startRec, int endRec);
   List<Bbs>  findAll(String category,int startRec, int endRec);
-
+  List<EventInfo> findAllEvents(int startRec, int endRec);
   /**
-   * 검색
+   * 홍보,후기 검색
    * @param filterCondition 분류,시작레코드번호,종료레코드번호,검색유형,검색어
    * @return
    */
   List<Bbs>  findAll(BbsFilterCondition filterCondition);
 
-  List<EventInfo> findAllEvents(int startRec, int endRec);
+  /**
+   * 이벤트검색
+   * @param filterCondition 분류,시작레코드번호,종료레코드번호,검색유형,검색어
+   * @return
+   */
+  List<EventInfo> findAllEvents(BbsFilterCondition filterCondition);
+
   /**
    * 상세 조회
    * @param id 게시글번호
@@ -69,6 +75,12 @@ public interface BbsDAO {
    */ 
   int increaseHitCount(Long id);
 
+  /**
+   * 좋아요증감
+   * @param id 게시글번호
+   * @return 수정건수
+   */
+  int increaseGoodCount(Long id);
   /**
    * 전체건수
    * @return 게시글 전체건수

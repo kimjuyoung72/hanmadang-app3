@@ -163,11 +163,21 @@
 
             <div class="bbs-search">
               <select id="searchType" name="searchType" th:field="${fc.searchType}">
-                <option th:value="TC">제목+내용</option>
-                <option th:value="T">제목</option>
-                <option th:value="C">내용</option>
-                <option th:value="E">아이디</option>
-                <option th:value="N">별칭</option>
+                <th:block th:if="${category} == B0101">
+                  <option th:value="ETC">제목+내용</option>
+                  <option th:value="ET">제목</option>
+                  <option th:value="EC">내용</option>
+                  <option th:value="EG">장르</option>
+                  <option th:value="ED">일자</option>
+                  <option th:value="EA">연령</option>
+                </th:block>
+                <th:block th:if="${category} != B0101">
+                  <option th:value="TC">제목+내용</option>
+                  <option th:value="T">제목</option>
+                  <option th:value="C">내용</option>
+                  <option th:value="E">아이디</option>
+                  <option th:value="N">별칭</option>
+                </th:block>
               </select>
               <input type="text" id="keyword" name="keyword" th:field="${fc.keyword}">
               <button id="searchBtn">검색</button>

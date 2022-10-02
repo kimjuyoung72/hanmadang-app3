@@ -6,16 +6,24 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title</title>
+  <style>
+<!--    nav {-->
+<!--      display: flex;-->
+<!--      flex-direction: column;-->
+<!--    }-->
+  </style>
 </head>
 
 <body>
   <nav th:fragment="global">
-    <ul class="depth1">
+    <ul class="menu">
       <li class="item"><a href="#" th:href="@{/bbs/list?category=B0101}">공연</a></li>
       <li class="item"><a href="#" th:href="@{/bbs/list?category=B0102}">홍보</a></li>
       <li class="item"><a href="#" th:href="@{/bbs/list?category=B0103}">후기</a></li>
       <li class="item"><a href="#" th:href="@{/bbs/list?category=B0104}">지도</a></li>
+      <li class="item"><input class="search__in" type="text"></li>
     </ul>
+
   </nav>
   <nav th:fragment="admin">
 

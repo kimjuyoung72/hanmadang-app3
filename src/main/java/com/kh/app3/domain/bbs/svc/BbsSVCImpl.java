@@ -62,6 +62,10 @@ public class BbsSVCImpl implements BbsSVC{
     return bbsDAO.findAll(filterCondition);
   }
 
+  @Override
+  public List<EventInfo> findAllEvents(BbsFilterCondition filterCondition) {
+    return bbsDAO.findAllEvents(filterCondition);
+  }
   //이벤트 정보
 
   @Override

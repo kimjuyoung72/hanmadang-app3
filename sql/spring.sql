@@ -194,12 +194,13 @@ create table bbs(
     email       varchar2(50),       --email
     nickname    varchar2(30),       --별칭
     hit         number(5) default 0,          --조회수
+    good        number(5) default 0,    --좋아요 -_-)b
     bcontent    clob,               --본문
-    pbbs_id     number(10),         --부모 게시글번호
-    bgroup      number(10),         --답글그룹
-    step        number(3) default 0,          --답글단계
-    bindent     number(3) default 0,          --답글들여쓰기
-    status      char(1),               --답글상태  (삭제: 'D', 임시저장: 'I')
+--    pbbs_id     number(10),         --부모 게시글번호
+--    bgroup      number(10),         --답글그룹
+--    step        number(3) default 0,          --답글단계
+--    bindent     number(3) default 0,          --답글들여쓰기
+--    status      char(1),               --답글상태  (삭제: 'D', 임시저장: 'I')
     cdate       timestamp default systimestamp,         --생성일시
     udate       timestamp default systimestamp          --수정일시
 );

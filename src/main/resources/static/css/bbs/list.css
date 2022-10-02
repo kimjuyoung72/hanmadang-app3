@@ -20,7 +20,7 @@ main { display:flex; justify-content:center; }
   border:1px solid #333;
   padding:3px;
 }
-.bbs-wrap .bbs-content table>thead>tr>th:nth-child(3){
+.bbs-wrap .bbs-content table>thead>tr>th:nth-child(2){
   width:50%;
 }
 
