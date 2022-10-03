@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-/* *{outline:1px solid red;} */
+*{outline:1px solid red;}
 html,body,p,img{ padding:0; margin:0;}
 ul { list-style: none; padding:0; margin:0;}
 a {text-decoration: none; color:inherit;}
@@ -77,10 +77,10 @@ img {
 
 /* main */
 .global-wrap .main .product-wrap{
-  display:grid;
+  /*display:grid;
   grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
   padding:30px;
-  gap:20px;
+  gap:20px;*/
 
 }
 .global-wrap .main .product-wrap .product-item .product-img{

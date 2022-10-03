@@ -1,6 +1,7 @@
 package com.kh.app3.domain.bbs.dao;
 
 import com.kh.app3.domain.EventInfo;
+import com.kh.app3.domain.FacInfo;
 
 import java.util.List;
 
@@ -44,6 +45,9 @@ public interface BbsDAO {
    */
   Bbs findByBbsId(Long id);
 
+  EventInfo findByEventId(Long id);
+
+  FacInfo findByFacId(String id);
   /**
    * 삭제
    * @param id 게시글번호
@@ -60,6 +64,7 @@ public interface BbsDAO {
   int updateByBbsId(Long id,Bbs bbs);
 
 
+  String facilityLink(String facid);
   /**
    * 답글작성
    * @param pbbsId 부모글번호

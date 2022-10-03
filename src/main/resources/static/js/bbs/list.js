@@ -17,11 +17,11 @@ const $searchBtn  = document.getElementById('searchBtn');
 //검색 버튼 클릭시
 $searchBtn?.addEventListener('click', search_f);
 
-//키워드 입력필드에 엔터키 눌렀을때 검색
-$keyword?.addEventListener('keydown', e=>{
-    if(e.key === 'Enter') {
-        search_f(e);
-    }
+    //키워드 입력필드에 엔터키 눌렀을때 검색
+    $keyword?.addEventListener('keydown', e=>{
+        if(e.key === 'Enter') {
+            search_f(e);
+        }
 });
 
 function search_f(e){

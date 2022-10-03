@@ -1,6 +1,7 @@
 package com.kh.app3.domain.bbs.svc;
 
 import com.kh.app3.domain.EventInfo;
+import com.kh.app3.domain.FacInfo;
 import com.kh.app3.domain.bbs.dao.Bbs;
 import com.kh.app3.domain.bbs.dao.BbsFilterCondition;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +51,9 @@ public interface BbsSVC {
    * @return
    */
   Bbs findByBbsId(Long id);
+
+  EventInfo findByEventId(Long id);
+  FacInfo findByFacId(String id);
 
   /**
    * 삭제

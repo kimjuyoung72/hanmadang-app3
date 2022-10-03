@@ -1,6 +1,7 @@
 package com.kh.app3.domain.bbs.dao;
 
 import com.kh.app3.domain.EventInfo;
+import com.kh.app3.domain.FacInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -340,6 +341,82 @@ public class BbsDAOImpl implements BbsDAO{
     return bbsItem;
   }
 
+  @Override
+  public EventInfo findByEventId(Long id) {
+
+    StringBuffer sql = new StringBuffer();
+    sql.append("SELECT  ");
+    sql.append("  event_id, ");
+    sql.append("  mt20id,  ");
+    sql.append("  prfnm,  ");
+    sql.append("  prfpdfrom,  ");
+    sql.append("  prfpdto, ");
+    sql.append("  fcltynm,  ");
+    sql.append("  prfcast, ");
+    sql.append("  prfcrew,  ");
+    sql.append("  prfruntime, ");
+    sql.append("  prfage, ");
+    sql.append("  entrpsnm,  ");
+    sql.append("  pcseguidance, ");
+    sql.append("  poster,  ");
+    sql.append("  sty,  ");
+    sql.append("  genrenm,  ");
+    sql.append("  prfstate,  ");
+    sql.append("  openrun,  ");
+    sql.append("  mt10id,  ");
+    sql.append("  dtguidance ");
+    sql.append("FROM  ");
+    sql.append("  p_event ");
+    sql.append("where event_id = ?  ");
+
+    EventInfo eventInfo = null;
+    try {
+      eventInfo = jt.queryForObject(
+          sql.toString(),
+          new BeanPropertyRowMapper<>(EventInfo.class),
+          id);
+    }catch (Exception e){ // 1건을 못찾으면
+      eventInfo = null;
+    }
+
+    return eventInfo;
+  }
+
+
+  @Override
+  public FacInfo findByFacId(String id) {
+
+    log.info("id={}", id);
+    StringBuffer sql = new StringBuffer();
+    sql.append("SELECT  ");
+    sql.append("  mt10id, ");
+    sql.append("  fcltynm,  ");
+    sql.append("  mt13cnt,  ");
+    sql.append("  fcltychartr,  ");
+    sql.append("  seatscale, ");
+    sql.append("  telno,  ");
+    sql.append("  relateurl, ");
+    sql.append("  adres,  ");
+    sql.append("  opende, ");
+    sql.append("  la, ");
+    sql.append("  lo  ");
+    sql.append("FROM  ");
+    sql.append("  p_facility ");
+    sql.append("where mt10id = ? ");
+
+    FacInfo facInfo = null;
+    try {
+      facInfo = jt.queryForObject(
+          sql.toString(),
+          new BeanPropertyRowMapper<>(FacInfo.class),
+          id);
+    }catch (Exception e){ // 1건을 못찾으면
+      facInfo = null;
+    }
+
+    return facInfo;
+  }
+
   //삭제
   @Override
   public int deleteByBbsId(Long id) {
@@ -373,6 +450,12 @@ public class BbsDAOImpl implements BbsDAO{
     );
 
     return updatedItemCount;
+  }
+
+  @Override
+  public String facilityLink(String facid) {
+
+    return null;
   }
 
   //답글

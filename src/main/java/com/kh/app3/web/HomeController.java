@@ -18,6 +18,7 @@ public class HomeController {
     HttpSession session = request.getSession(false);
     view = (session == null) ? "beforeLogin" : "afterLogin" ;
 
+
     return view;
   }
 

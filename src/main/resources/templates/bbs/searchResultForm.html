@@ -44,13 +44,13 @@
         <div class="bbs-wrap" th:data-code="${category}">
           <div class="bbs-title" ><h3 th:text="${bbsTitle['__${category}__']}?:_"></h3></div>
           <div class="bbs-body">
-<!--            공연/전시-->
-            <div class="bbs-content" th:if="${list} and ${category} == B0101">
+            <!--            공연/전시-->
+            <div class="bbs-content" th:if="${res1}" th:object="${res1}">
               <div id="imageFiles">
-                <th:block th:each="event : ${list}">
+                <th:block th:each="img : ${res1}">
 
-                  <img width="100px" src="http://localhost:9080/attach/img/P0102/82335ef9-18d7-4509-b3d4-df57d8d50a48.jpg"
-                       th:if="${event.poster}" th:src="${event.poster}"
+                  <img width="80px" src="http://localhost:9080/attach/img/P0102/82335ef9-18d7-4509-b3d4-df57d8d50a48.jpg"
+                       th:if="${img.poster}" th:src="${img.poster}"
                        alt="이미지를 불러올수 없습니다">
                 </th:block>
               </div>
@@ -73,7 +73,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="event : ${list}" th:class="${eventStat.odd} ? odd_row__color">
+                <tr th:each="event : ${res1}" th:class="${eventStat.odd} ? odd_row__color">
                   <td th:text="${event.eventId}">1</td>
                   <td><a href="/events/21" th:href="@{/bbs/{id}(id=${event.eventId},category=B0101)}"  th:text="${event.prfnm}">이봐 김서방</a></td>
 
@@ -84,13 +84,13 @@
                 </tbody>
               </table>
             </div>
-<!--            홍보, 후기-->
+            <!--            홍보, 후기-->
             <div class="bbs-content" th:if="${list} and (${category} == B0102 or ${category} == B0103)">
               <table>
                 <thead>
                 <tr>
                   <th>번호</th>
-<!--                  <th>분류</th>-->
+                  <!--                  <th>분류</th>-->
                   <th>제목</th>
                   <th>작성자</th>
                   <th>작성일</th>
@@ -100,9 +100,9 @@
                 <tbody>
                 <tr th:each="item : ${list}">
                   <td th:text="${item.bbsId}"></td>
-<!--                  <td th:text="${#strings.isEmpty(category)?-->
-<!--                    bbsTitle[item.bcategory]-->
-<!--                    :bbsTitle['__${category}__']}">자유게시판</td>-->
+                  <!--                  <td th:text="${#strings.isEmpty(category)?-->
+                  <!--                    bbsTitle[item.bcategory]-->
+                  <!--                    :bbsTitle['__${category}__']}">자유게시판</td>-->
                   <td>
                     <!--들여쓰기-->
                     <th:block th:if="${item.bindent} > 0">
@@ -110,7 +110,7 @@
                       <!--                  Create a sequence (array) of integer numbers going from x to y -->
                       <!--                  ${#numbers.sequence(from,to)}-->
                       <span th:each="cnt : ${#numbers.sequence(1,item.bindent)}">&nbsp;&nbsp;</span>
-<!--                      <i class="fa-solid fa-reply"></i>-->
+                      <!--                      <i class="fa-solid fa-reply"></i>-->
                       <i class="fa-solid fa-comment-dots"></i>
                     </th:block>
                     <a href="" th:href="@{/bbs/{id}(id=${item.bbsId},category=${category})}" th:text="${item.title}">제목</a>
@@ -142,7 +142,7 @@
               <!--페이지표시-->
               <th:block th:each="pnum : ${#numbers.sequence(fc.startPage,fc.endPage)}">
                 <th:block th:if="${pnum != 0}">
-<!--                  <a class="bbs-page-item" th:classappend="${fc.rc.reqPage == pnum} ? 'active'" href="" th:href="@{|/bbs/list/${pnum}|}" th:text="${pnum}">1</a>-->
+                  <!--                  <a class="bbs-page-item" th:classappend="${fc.rc.reqPage == pnum} ? 'active'" href="" th:href="@{|/bbs/list/${pnum}|}" th:text="${pnum}">1</a>-->
                   <a class="bbs-page-item" th:classappend="${fc.rc.reqPage == pnum} ? 'active'" href=""
                      th:href="@{/bbs/list/{reqPage}/{searchType}/{keyword}(reqPage=${pnum},searchType=${fc.searchType},keyword=${fc.keyword},category=${param.category})}"
                      th:text="${pnum}">1</a>
@@ -185,7 +185,7 @@
             </div>
           </div>
         </div>
-<!--        문화지도-->
+        <!--        문화지도-->
         <div class="bbs-content" th:if="${category} == B0104">
 
         </div>

@@ -7,10 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title</title>
   <style>
-<!--    nav {-->
-<!--      display: flex;-->
-<!--      flex-direction: column;-->
-<!--    }-->
+    #searchAll {
+
+    }
   </style>
 </head>
 
@@ -21,7 +20,10 @@
       <li class="item"><a href="#" th:href="@{/bbs/list?category=B0102}">홍보</a></li>
       <li class="item"><a href="#" th:href="@{/bbs/list?category=B0103}">후기</a></li>
       <li class="item"><a href="#" th:href="@{/bbs/list?category=B0104}">지도</a></li>
-      <li class="item"><input class="search__in" type="text"></li>
+      <form class="search_all">
+          <input id="searchAll" class="search__in" type="text">
+          <button id="searchBtn">검색</button>
+      </form>
     </ul>
 
   </nav>
@@ -44,5 +46,34 @@
       </li>
     </ul>
   </nav>
+  <scirpt>
+
+    //검색
+    const $searchType = document.getElementById('searchType');
+    const $keyword    = document.getElementById('keyword');
+    const $searchBtn  = document.getElementById('searchBtn');
+
+    //검색 버튼 클릭시
+    $searchBtn?.addEventListener('click', search_f);
+
+    //키워드 입력필드에 엔터키 눌렀을때 검색
+    $keyword?.addEventListener('keydown', e=>{
+    if(e.key === 'Enter') {
+    search_f(e);
+    }
+    });
+
+    function search_f(e){
+    //검색어입력 유무체크
+    if($keyword.value.trim().length === 0){
+    alert('검색어를 입력하세요');
+    $keyword.focus();$keyword.select(); //커서이동
+    return false;
+    }
+    const url = `/lists/search`;
+    location.href = url;
+    }
+
+  </scirpt>
 </body>
 </html>

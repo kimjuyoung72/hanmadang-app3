@@ -1,0 +1,5 @@
+@charset "utf-8";
+.bbs-wrap .bbs-btngrp{
+  display:flex;
+  justify-content: flex-end;
+}

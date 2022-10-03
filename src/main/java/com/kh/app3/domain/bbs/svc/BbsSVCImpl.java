@@ -1,6 +1,7 @@
 package com.kh.app3.domain.bbs.svc;
 
 import com.kh.app3.domain.EventInfo;
+import com.kh.app3.domain.FacInfo;
 import com.kh.app3.domain.bbs.dao.Bbs;
 import com.kh.app3.domain.bbs.dao.BbsDAO;
 import com.kh.app3.domain.bbs.dao.BbsFilterCondition;
@@ -79,6 +80,19 @@ public class BbsSVCImpl implements BbsSVC{
     Bbs findedItem = bbsDAO.findByBbsId(id);
     bbsDAO.increaseHitCount(id);
     return findedItem;
+  }
+
+  @Override
+  public EventInfo findByEventId(Long id) {
+    EventInfo finedEvent = bbsDAO.findByEventId(id);
+    bbsDAO.increaseHitCount(id);
+    return finedEvent;
+  }
+
+  @Override
+  public FacInfo findByFacId(String id) {
+    FacInfo finedFac = bbsDAO.findByFacId(id);
+    return finedFac;
   }
 
   //삭제
