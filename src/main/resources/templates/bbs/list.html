@@ -48,10 +48,11 @@
             <div class="bbs-content" th:if="${list} and ${category} == B0101">
               <div id="imageFiles">
                 <th:block th:each="event : ${list}">
-
-                  <img width="100px" src="http://localhost:9080/attach/img/P0102/82335ef9-18d7-4509-b3d4-df57d8d50a48.jpg"
-                       th:if="${event.poster}" th:src="${event.poster}"
-                       alt="이미지를 불러올수 없습니다">
+                  <a href="" th:href="@{/bbs/{id}(id=${event.eventId},category=B0101)}">
+                    <img width="100px" src="http://localhost:9080/attach/img/P0102/82335ef9-18d7-4509-b3d4-df57d8d50a48.jpg"
+                         th:if="${event.poster}" th:src="${event.poster}"
+                         alt="이미지를 불러올수 없습니다">
+                  </a>      
                 </th:block>
               </div>
               <hr>
@@ -63,13 +64,6 @@
                   <th>시작일</th>
                   <th>마감일</th>
                   <th>공연장</th>
-                  <!--    <th>출연진</th>-->
-                  <!--      <th>런타임</th>-->
-                  <!--      <th>연령</th>-->
-                  <!--      <th>가격</th>-->
-                  <!--      <th>장르</th>-->
-                  <!--      <th>상태</th>-->
-                  <!--      <th>공연시간</th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -100,9 +94,6 @@
                 <tbody>
                 <tr th:each="item : ${list}">
                   <td th:text="${item.bbsId}"></td>
-<!--                  <td th:text="${#strings.isEmpty(category)?-->
-<!--                    bbsTitle[item.bcategory]-->
-<!--                    :bbsTitle['__${category}__']}">자유게시판</td>-->
                   <td>
                     <!--들여쓰기-->
                     <th:block th:if="${item.bindent} > 0">

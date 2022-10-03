@@ -51,7 +51,8 @@
                 <div><lable>특성 : </lable><span th:text="|*{fcltychartr} |"></span></div>
                 <div><lable>객석수 : </lable><span th:text="|*{seatscale} |"></span></div>
                 <div><lable>전화번호 : </lable><span th:text="|*{telno} |"></span></div>
-                <div><lable>홈페이지 : </lable><span th:text="|*{relateurl} |"></span></div>
+                <div><lable>홈페이지 : </lable>
+                  <a href="" th:href="*{relateurl}" target="_blank"><span th:text="*{relateurl}"></span></a></div>
                 <div><lable>주소 : </lable><span th:text="|*{adres} |"></span></div>
                 <div><lable>개관 : </lable><span th:text="|*{opende} |"></span></div>
                 <div><lable>위도 : </lable><span th:text="|*{la} |"></span></div>
