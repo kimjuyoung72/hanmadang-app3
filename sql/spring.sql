@@ -1,27 +1,25 @@
-
 --테이블 삭제
 drop table uploadfile;
-drop table bbs;
-drop table member;
 drop table notice;
-drop table code;
 drop table p_event;
 drop table p_facility;
-drop table reply;
 drop table good;
+drop table reply;
+drop table bbs;
+drop table member;
+drop table code;
 
 --drop table promotion;
 --drop table review;
 
 --시퀀스삭제
+drop sequence reply_reply_seq;
+drop sequence good_good_id_seq;
 drop sequence member_member_id_seq;
 drop sequence notice_notice_id_seq;
 drop sequence bbs_bbs_id_seq;
 drop sequence uploadfile_uploadfile_id_seq;
 drop sequence p_event_post_id_seq;
-drop sequence reply_reply_seq;
-drop sequence good_good_seq;
-
 --drop sequence promotion_promotion_post_id_seq;
 --drop sequence review_review_post_id_seq;
 -------
@@ -119,7 +117,6 @@ create table p_facility(
 alter table p_facility add constraint p_facility_mt10id_pk primary key(mt10id);
 
 select * from p_facility;
-
 -------
 --회원
 -------
@@ -297,7 +294,7 @@ create table reply(
   rcontent        varchar2(100),
   cdate           timestamp default systimestamp,
   udate           timestamp default systimestamp
-);
+); 
 
 --기본키
 alter table reply add constraint reply_reply_id_pk primary key(reply_id);
@@ -309,7 +306,7 @@ alter table reply add constraint reply_email_fk
     foreign key(email) references member(email);
 --제약조건
 
-create sequence reply_reply_id_seq;
+create sequence reply_reply_seq;
 
 
 ---------
@@ -318,7 +315,6 @@ create sequence reply_reply_id_seq;
 create table good(
   good_id       number(10),
   p_post_id     number(10),
-  p_member_id   number(10),
   cdate           timestamp default systimestamp,
   udate           timestamp default systimestamp
 );
@@ -329,10 +325,6 @@ alter table good add constraint good_good_id_pk primary key(good_id);
 --외래키
 alter table good add constraint good_p_post_id_fk
     foreign key(p_post_id) references bbs(bbs_id);
-alter table good add constraint p_member_id_fk
-    foreign key(p_member_id) references member(member_id);
-
-
-create sequence good_good_id_seq;
-
-commit;
+    
+    
+create sequence good_good_id_seq;    
